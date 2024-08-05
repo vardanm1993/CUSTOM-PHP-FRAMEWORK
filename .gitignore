@@ -1,3 +1,6 @@
-./.idea
-./vendor
+# Ignore .idea directory
+.idea/
+
+# Ignore vendor directory
 /vendor/
+
