@@ -1,0 +1,28 @@
+{
+    "name": "iamx/php_custom_framework",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Core\\": "core/"
+        },
+
+        "files": [
+            "core/helpers/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "vardanm1993",
+            "email": "vardanm1993@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
+}
