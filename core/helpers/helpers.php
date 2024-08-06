@@ -7,6 +7,17 @@ if (!function_exists('base_path')) {
     }
 }
 
+if (! function_exists('ensure_leading_slash')) {
+    function ensure_leading_slash(string $url): string
+    {
+        if ($url[0] !== '/') {
+            $url = '/' . $url;
+        }
+        return $url;
+    }
+}
+
+
 if (!function_exists('dd')) {
     /**
      * Dump the passed variables and end the script.
