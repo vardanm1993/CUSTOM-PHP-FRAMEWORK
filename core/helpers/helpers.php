@@ -1,5 +1,9 @@
 <?php
 
+use Core\Exceptions\NotFoundTemplate;
+use Core\Route\Route;
+use Core\View;
+
 if (!function_exists('base_path')) {
     function base_path(string $path = ''): string
     {
@@ -102,6 +106,23 @@ if (!function_exists('dump')) {
             var_dump($arg);
             echo '</pre></div>';
         }
+    }
+}
+
+if (! function_exists('route')){
+    function route(string $name, array $data = []): string
+    {
+        return Route::generateUrl(name: $name, params: $data);
+    }
+}
+
+if (! function_exists('view')){
+    /**
+     * @throws NotFoundTemplate
+     */
+    function view(string $template, array $data = []): string
+    {
+        return View::render(template: $template, data: $data);
     }
 }
 

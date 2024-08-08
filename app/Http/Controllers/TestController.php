@@ -2,15 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use Core\Exceptions\NotFoundTemplate;
+
 class TestController
 {
-    public function test()
+
+    /**
+     * @throws NotFoundTemplate
+     */
+    public function test(): string
     {
-        return 'test';
+        return view('index');
     }
 
-    public function show($id)
+    /**
+     * @throws NotFoundTemplate
+     */
+    public function show($id): string
     {
-        return $id;
+        return view('show',compact('id'));
     }
 }
