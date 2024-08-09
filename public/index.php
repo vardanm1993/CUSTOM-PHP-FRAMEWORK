@@ -11,6 +11,7 @@ require_once BASE_PATH . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
 $dotenv->safeLoad();
 
+require base_path('bootstrap.php');
 require base_path('routes/web.php');
 
 

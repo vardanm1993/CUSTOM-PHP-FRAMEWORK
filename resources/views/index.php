@@ -9,5 +9,7 @@
 </head>
 <body>
 <h1>This is index page</h1>
+
+<h2>The request method is <?= $method ?></h2>
 </body>
 </html>

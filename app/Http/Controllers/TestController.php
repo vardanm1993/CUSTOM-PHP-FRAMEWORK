@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use Core\Exceptions\NotFoundTemplate;
+use Core\Request;
 
 class TestController
 {
+    public function __construct(public Request $request)
+    {
+    }
+
 
     /**
      * @throws NotFoundTemplate
      */
     public function test(): string
     {
-        return view('index');
+        return view('index', ['method' => $this->request->getMethod()]);
     }
 
     /**

@@ -2,14 +2,21 @@
 
 namespace Core\Route;
 
+use Core\App;
+use Core\Exceptions\ContainerException;
 use Core\Exceptions\InvalidCallbackException;
 use Core\Request;
 use Core\Response;
+use ReflectionException;
 
 class RouteDispatcher
 {
     /**
+     * @param Request $request
+     * @return Response
      * @throws InvalidCallbackException
+     * @throws ContainerException
+     * @throws ReflectionException
      */
     public static function dispatch(Request $request): Response
     {
@@ -24,7 +31,7 @@ class RouteDispatcher
                 $params = array_filter($matches,'is_string', ARRAY_FILTER_USE_KEY);
 
                 $callback = is_array($routeConfig->callback) ?
-                    [(new $routeConfig->callback[0]),$routeConfig->callback[1]] :
+                    [App::resolve($routeConfig->callback[0]),$routeConfig->callback[1]] :
                     $routeConfig->callback;
 
                 if (!is_callable($callback)) {
