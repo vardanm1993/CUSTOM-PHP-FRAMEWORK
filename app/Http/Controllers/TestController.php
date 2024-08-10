@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Core\Exceptions\NotFoundTemplate;
 use Core\Request;
+use Core\Response;
 
 class TestController
 {
@@ -26,5 +27,10 @@ class TestController
     public function show($id): string
     {
         return view('show',compact('id'));
+    }
+
+    public function auth(): Response
+    {
+
     }
 }

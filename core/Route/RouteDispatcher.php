@@ -5,6 +5,7 @@ namespace Core\Route;
 use Core\App;
 use Core\Exceptions\ContainerException;
 use Core\Exceptions\InvalidCallbackException;
+use Core\Middleware\MiddlewareResolver;
 use Core\Request;
 use Core\Response;
 use ReflectionException;
@@ -23,15 +24,14 @@ class RouteDispatcher
         $method = $request->getMethod();
         $uri = $request->getPathInfo();
 
+        foreach (Route::routes()[$method] as $routeConfig) {
 
-        foreach (Route::routes()[$method] as $routeConfig){
+            if (preg_match($routeConfig->route, $uri, $matches)) {
 
-            if (preg_match($routeConfig->route, $uri, $matches)){
-
-                $params = array_filter($matches,'is_string', ARRAY_FILTER_USE_KEY);
+                $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
 
                 $callback = is_array($routeConfig->callback) ?
-                    [App::resolve($routeConfig->callback[0]),$routeConfig->callback[1]] :
+                    [App::resolve($routeConfig->callback[0]), $routeConfig->callback[1]] :
                     $routeConfig->callback;
 
                 if (!is_callable($callback)) {
@@ -40,9 +40,15 @@ class RouteDispatcher
                     );
                 }
 
-
-
-                $response = call_user_func_array($callback, $params);
+                if ($routeConfig->middlewares) {
+                    $response = MiddlewareResolver::resolve(
+                        middlewares: $routeConfig->middlewares,
+                        request: $request,
+                        next: static fn(Request $request) => call_user_func_array($callback, $params)
+                    );
+                } else {
+                    $response = call_user_func_array($callback, $params);
+                }
 
                 if (!$response) {
                     exit();

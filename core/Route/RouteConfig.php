@@ -6,7 +6,7 @@ class RouteConfig
 {
     public string $name = '';
 
-    public array $middleware = [];
+    public array $middlewares = [];
 
     public function __construct(
         public string $route,
@@ -25,7 +25,7 @@ class RouteConfig
 
     public function middleware(array|string $middleware): RouteConfig
     {
-        $this->middleware = is_array($middleware) ? $middleware : [$middleware];
+        $this->middlewares = is_array($middleware) ? $middleware : [$middleware];
 
         return $this;
     }

@@ -126,3 +126,10 @@ if (! function_exists('view')){
     }
 }
 
+if (!function_exists('redirect')) {
+    function redirect(string $uri): void
+    {
+        header("Location: {$uri}");
+        exit();
+    }
+}
