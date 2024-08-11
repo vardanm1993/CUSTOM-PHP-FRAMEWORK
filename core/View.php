@@ -13,8 +13,14 @@ class View
     {
         $templatePath = base_path('resources/views/' . $template . '.php');
 
-        if (!file_exists($templatePath)) {
-            throw new NotFoundTemplate("Template file not found: " . $template);
+        $bladePath = base_path('resources/views/' . $template . '.blade.php');
+
+        if (!file_exists($templatePath) && !file_exists($bladePath)) {
+            throw new \RuntimeException("Template file not found: " . $template);
+        }
+
+        if (file_exists($bladePath)) {
+            return App::resolve(Blade::class)?->parseToBlade($bladePath,$data);
         }
 
         extract($data);

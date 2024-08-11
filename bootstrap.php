@@ -1,6 +1,7 @@
 <?php
 
 use Core\App;
+use Core\Blade;
 use Core\Container;
 use Core\Request;
 
@@ -14,6 +15,13 @@ $container->bind(Request::class, function () {
         files: $_FILES,
         cookies: $_COOKIE
     );
+});
+
+$container->bind(Blade::class, function (){
+
+    $patterns = require base_path('config/blade.php');
+
+    return new Blade($patterns);
 });
 
 App::setContainer($container);
