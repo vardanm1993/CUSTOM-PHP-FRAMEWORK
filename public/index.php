@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+session_start();
+
+use Core\App;
+use Core\Exceptions\ContainerException;
+use Core\Exceptions\InvalidCallbackException;
 use Core\Kernel;
 use Core\Request;
 
@@ -17,14 +22,12 @@ require base_path('routes/web.php');
 
 $kernel = new Kernel();
 
-$request = new Request(
-    server: $_SERVER,
-    get: $_GET,
-    post: $_POST,
-    files: $_FILES,
-    cookies: $_COOKIE
-);
 
-$response = $kernel->handle(request: $request);
+try {
+    $response = $kernel->handle(request: App::resolve(Request::class));
 
-$response->send();
+    $response->send();
+
+} catch (ContainerException|InvalidCallbackException|ReflectionException $e) {
+}
+

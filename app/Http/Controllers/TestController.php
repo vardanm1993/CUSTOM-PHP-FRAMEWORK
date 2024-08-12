@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Core\Exceptions\ContainerException;
 use Core\Exceptions\NotFoundTemplate;
+use Core\Redirect;
 use Core\Request;
-use Core\Response;
+    use ReflectionException;
 
 class TestController
 {
     public function __construct(public Request $request)
     {
     }
-
 
     /**
      * @throws NotFoundTemplate
@@ -22,6 +23,15 @@ class TestController
     }
 
     /**
+     * @throws ReflectionException
+     * @throws ContainerException
+     */
+    public function testRedirect(): Redirect
+    {
+        return redirect_back('/')->with('id', 1);
+    }
+
+    /**
      * @throws NotFoundTemplate
      */
     public function show($id): string
@@ -29,8 +39,7 @@ class TestController
         return view('show',compact('id'));
     }
 
-    public function auth(): Response
+    public function auth(): Redirect
     {
-
     }
 }

@@ -1,8 +1,11 @@
 <?php
 
+use Core\Exceptions\ContainerException;
 use Core\Exceptions\NotFoundTemplate;
+use Core\Redirect;
 use Core\Route\Route;
 use Core\View;
+use JetBrains\PhpStorm\NoReturn;
 
 if (!function_exists('base_path')) {
     function base_path(string $path = ''): string
@@ -11,7 +14,7 @@ if (!function_exists('base_path')) {
     }
 }
 
-if (! function_exists('ensure_leading_slash')) {
+if (!function_exists('ensure_leading_slash')) {
     function ensure_leading_slash(string $url): string
     {
         if ($url[0] !== '/') {
@@ -109,15 +112,18 @@ if (!function_exists('dump')) {
     }
 }
 
-if (! function_exists('route')){
+if (!function_exists('route')) {
     function route(string $name, array $data = []): string
     {
         return Route::generateUrl(name: $name, params: $data);
     }
 }
 
-if (! function_exists('view')){
+if (!function_exists('view')) {
     /**
+     * @param string $template
+     * @param array $data
+     * @return string
      * @throws NotFoundTemplate
      */
     function view(string $template, array $data = []): string
@@ -127,9 +133,53 @@ if (! function_exists('view')){
 }
 
 if (!function_exists('redirect')) {
-    function redirect(string $uri): void
+    /**
+     * @param string $uri
+     * @return Redirect
+     */
+    function redirect(string $uri): Redirect
     {
-        header("Location: {$uri}");
-        exit();
+        return Redirect::to($uri);
     }
 }
+
+if (!function_exists('redirect_with')) {
+    /**
+     * @param string $uri
+     * @param string $key
+     * @param mixed $value
+     * @return Redirect
+     */
+    function redirect_with(string $uri, string $key, mixed $value): Redirect
+    {
+        return Redirect::to($uri)->with(key: $key, value: $value);
+    }
+}
+
+if (!function_exists('redirect_back')) {
+    /**
+     * @return Redirect
+     * @throws ContainerException
+     * @throws ReflectionException
+     */
+    function redirect_back(): Redirect
+    {
+        return Redirect::back();
+    }
+}
+
+if (!function_exists('redirect_back_with')) {
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return Redirect
+     * @throws ContainerException
+     * @throws ReflectionException
+     */
+    #[NoReturn] function redirect_back_with(string $key, mixed $value): Redirect
+    {
+        return Redirect::backWith(key: $key, value: $value);
+    }
+}
+
