@@ -29,5 +29,6 @@ try {
     $response->send();
 
 } catch (ContainerException|InvalidCallbackException|ReflectionException $e) {
+    echo $e->getMessage();
 }
 

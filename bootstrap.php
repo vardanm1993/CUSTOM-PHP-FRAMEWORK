@@ -3,6 +3,7 @@
 use Core\App;
 use Core\Blade;
 use Core\Container;
+use Core\Database;
 use Core\Request;
 
 $container = new Container();
@@ -15,6 +16,13 @@ $container->bind(Request::class, function () {
         files: $_FILES,
         cookies: $_COOKIE
     );
+});
+
+$container->bind(Database::class, function () {
+
+    $config = require base_path('config/database.php');
+
+    return new Database($config['database']['mysql']);
 });
 
 $container->bind(Blade::class, function (){

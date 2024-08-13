@@ -3,6 +3,7 @@
 use Core\Exceptions\ContainerException;
 use Core\Exceptions\NotFoundTemplate;
 use Core\Redirect;
+use Core\Response;
 use Core\Route\Route;
 use Core\View;
 use JetBrains\PhpStorm\NoReturn;
@@ -177,9 +178,20 @@ if (!function_exists('redirect_back_with')) {
      * @throws ContainerException
      * @throws ReflectionException
      */
-    #[NoReturn] function redirect_back_with(string $key, mixed $value): Redirect
+    function redirect_back_with(string $key, mixed $value): Redirect
     {
         return Redirect::backWith(key: $key, value: $value);
     }
 }
 
+if (!function_exists('abort')) {
+    /**
+     * @param int $code
+     * @return Response
+     * @throws NotFoundTemplate
+     */
+    function abort(int $code = 404): Response
+    {
+        return new Response(content: view($code), statusCode: $code);
+    }
+}
