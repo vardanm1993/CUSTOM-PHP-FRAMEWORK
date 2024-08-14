@@ -2,15 +2,21 @@
 
 namespace Core;
 
-use Core\Exceptions\NotFoundTemplate;
+use ReflectionException;
 
 class View
 {
     /**
-     * @throws NotFoundTemplate
+     * @param string $template
+     * @param array $data
+     * @return string
+     * @throws Exceptions\ContainerException
+     * @throws ReflectionException
      */
     public static function render(string $template, array $data = []): string
     {
+        $template = str_replace('.', '/', $template);
+
         $templatePath = base_path('resources/views/' . $template . '.php');
 
         $bladePath = base_path('resources/views/' . $template . '.blade.php');

@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Core\Exceptions\ContainerBuildException;
 use Core\Exceptions\ContainerClassException;
 use Core\Exceptions\ContainerDependencyException;
 use Core\Exceptions\ContainerException;
