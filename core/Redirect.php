@@ -41,7 +41,7 @@ class Redirect
 
     public function with(string $key, mixed $value): Redirect
     {
-        $_SESSION[$key] = $value;
+        Session::put($key, $value);
         return $this;
     }
 }

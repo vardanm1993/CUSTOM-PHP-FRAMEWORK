@@ -8,7 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-<h1>This is index page</h1>
+<h1>This is app main page</h1>
 
 @yield('content')
 </body>

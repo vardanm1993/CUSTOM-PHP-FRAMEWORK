@@ -26,6 +26,10 @@ return [
     '/@else/' => '<?php else: ?>',
     '/@endif/' => '<?php endif; ?>',
 
+    // Custom @session('key') directive
+    '/@session\(\s*\'(.*?)\'\s*\)/' => '<?php if (\Core\Session::get(\'$1\')): ?>',
+    '/@endsession/' => '<?php endif; ?>',
+
     // Loop statements
     '/@foreach\(\s*(.*?)\s*\)/' => '<?php foreach ($1 as $2): ?>',
     '/@endforeach/' => '<?php endforeach; ?>',
