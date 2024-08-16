@@ -30,6 +30,10 @@ return [
     '/@session\(\s*\'(.*?)\'\s*\)/' => '<?php if (\Core\Session::get(\'$1\')): ?>',
     '/@endsession/' => '<?php endif; ?>',
 
+    // @error('field') directive
+    '/@error\(\s*\'(.*?)\'\s*\)/' => '<?php if ($message = \Core\Session::get("errors")["$1"][0] ?? null): ?>',
+    '/@enderror/' => '<?php endif; ?>',
+
     // Loop statements
     '/@foreach\(\s*(.*?)\s*\)/' => '<?php foreach ($1 as $2): ?>',
     '/@endforeach/' => '<?php endforeach; ?>',

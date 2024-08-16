@@ -5,6 +5,7 @@ use Core\Exceptions\NotFoundTemplate;
 use Core\Redirect;
 use Core\Response;
 use Core\Route\Route;
+use Core\Session;
 use Core\View;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -193,5 +194,17 @@ if (!function_exists('abort')) {
     function abort(int $code = 404): Response
     {
         return new Response(content: view($code), statusCode: $code);
+    }
+}
+
+if (!function_exists('old')) {
+    /**
+     * @param string $key
+     * @param $default
+     * @return mixed
+     */
+    function old(string $key, $default = null): mixed
+    {
+        return Session::old($key, $default);
     }
 }

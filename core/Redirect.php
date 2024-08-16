@@ -7,6 +7,7 @@ use ReflectionException;
 
 class Redirect
 {
+    private Validator $validator;
 
     public function __construct(protected string $url)
     {
@@ -41,7 +42,20 @@ class Redirect
 
     public function with(string $key, mixed $value): Redirect
     {
-        Session::put($key, $value);
+        Session::flash($key, $value);
+        return $this;
+    }
+
+    public function withErrors(Validator $validator): Redirect
+    {
+        $this->validator = $validator;
+        Session::flash('errors', $validator->errors());
+        return $this;
+    }
+
+    public function withInput(?Validator $validator): Redirect
+    {
+        Session::flash('old', $this->validator->getData() ?? []);
         return $this;
     }
 }

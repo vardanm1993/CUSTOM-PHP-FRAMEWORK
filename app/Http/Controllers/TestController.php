@@ -8,6 +8,7 @@ use Core\Exceptions\ContainerException;
 use Core\Exceptions\NotFoundTemplate;
 use Core\Redirect;
 use Core\Request;
+use Core\Validator;
 use ReflectionException;
 
 class TestController
@@ -33,6 +34,7 @@ class TestController
         return redirect_back()->with('id', 1);
     }
 
+
     /**
      * @throws ContainerException
      * @throws ReflectionException
@@ -40,9 +42,20 @@ class TestController
     public function store()
     {
         $data = [
-            'name' => 'name',
-            'description' => 'description'
+            'name' => 'pr',
+            'description' => 'new red product'
         ];
+
+        $validator = Validator::make($data, [
+            'name' => 'required|string|min:3|max:20',
+            'description' => 'required|string'
+        ]);
+
+        $data = $validator->validated();
+
+        if ($validator->fails()){
+            redirect('test/1');
+        }
 
         $db = App::resolve(Database::class);
 
@@ -58,7 +71,10 @@ class TestController
 
         $db->query("INSERT INTO test (name, description) VALUES (:name, :description)", $data);
 
-        redirect('/test/1');
+
+        return redirect('/test/2');
+
+
     }
 
     /**
