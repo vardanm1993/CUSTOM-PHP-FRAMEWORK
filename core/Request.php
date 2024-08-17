@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use JsonException;
+
 class Request
 {
     public function __construct(
@@ -26,7 +28,7 @@ class Request
 
     public function getPathInfo(): false|string
     {
-        return rtrim(strtok($this->getUri(), '?'),'/');
+        return rtrim(strtok($this->getUri(), '?'), '/');
     }
 
     public function getBody(): false|string
@@ -35,10 +37,69 @@ class Request
     }
 
 
+    /**
+     * @throws JsonException
+     */
     public function getJson(): array
     {
-        return json_decode($this->getBody(), true);
+        return json_decode($this->getBody(), true, 512, JSON_THROW_ON_ERROR);
     }
 
+    /**
+     * @throws JsonException
+     */
+    public function all(): array
+    {
+        $json = $this->getJson() ?? [];
+
+        return array_merge($this->get, $this->post, $this->files, $json);
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function input(string $key, $default = null)
+    {
+        if (array_key_exists($key, $this->post)) {
+            return $this->post[$key];
+        }
+
+        if (array_key_exists($key, $this->get)) {
+            return $this->get[$key];
+        }
+
+        $json = $this->getJson() ?? [];
+        if (array_key_exists($key, $json)) {
+            return $json[$key];
+        }
+
+        return $default;
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function has(string $key): bool
+    {
+        return array_key_exists($key, $this->post) ||
+            array_key_exists($key, $this->get) ||
+            (array_key_exists($key, $this->getJson() ?? []));
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function only(array $keys): array
+    {
+        return array_intersect_key($this->all(), array_flip($keys));
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function except(array $keys): array
+    {
+        return array_diff_key($this->all(), array_flip($keys));
+    }
 
 }

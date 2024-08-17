@@ -9,6 +9,7 @@ use Core\Exceptions\NotFoundTemplate;
 use Core\Redirect;
 use Core\Request;
 use Core\Validator;
+use JsonException;
 use ReflectionException;
 
 class TestController
@@ -38,22 +39,19 @@ class TestController
     /**
      * @throws ContainerException
      * @throws ReflectionException
+     * @throws JsonException
      */
-    public function store()
+    public function store(): Redirect
     {
-        $data = [
-            'name' => 'pr',
-            'description' => 'new red product'
-        ];
 
-        $validator = Validator::make($data, [
+        $validator = Validator::make($this->request->all(), [
             'name' => 'required|string|min:3|max:20',
             'description' => 'required|string'
         ]);
 
         $data = $validator->validated();
 
-        if ($validator->fails()){
+        if ($validator->fails()) {
             redirect('test/1');
         }
 
@@ -71,10 +69,7 @@ class TestController
 
         $db->query("INSERT INTO test (name, description) VALUES (:name, :description)", $data);
 
-
         return redirect('/test/2');
-
-
     }
 
     /**

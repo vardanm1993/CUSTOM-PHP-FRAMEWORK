@@ -7,10 +7,9 @@ class Validator
     protected array $data = [];
     protected array $rules = [];
     protected array $errors = [];
-
     protected array $cleanData = [];
 
-    public static function make(array $data, array $rules , bool $sessionFlash = true): Validator
+    public static function make(array $data, array $rules, bool $sessionFlash = true): Validator
     {
         $validator = new self();
         $validator->data = $data;
@@ -25,14 +24,10 @@ class Validator
         return $validator;
     }
 
-
-
     private function validate(): void
     {
-
         foreach ($this->rules as $field => $rulesForField) {
             $value = $this->data[$field] ?? null;
-
 
             foreach ($this->parseRule($rulesForField) as $rule) {
                 $this->apply($rule, $value, $field);
@@ -44,13 +39,12 @@ class Validator
         }
     }
 
-
     private function parseRule(array|string $rulesForField): array
     {
         return is_array($rulesForField) ? $rulesForField : explode('|', $rulesForField);
     }
 
-    private function apply(mixed $rule, mixed $value, int|string $field)
+    private function apply(mixed $rule, mixed $value, int|string $field): void
     {
         if (str_contains($rule, ':')) {
             [$ruleName, $ruleValue] = explode(':', $rule);
@@ -130,7 +124,7 @@ class Validator
         }
     }
 
-    private function confirmed(string $field , mixed $value , string $confirmFieldName): void
+    private function confirmed(string $field, mixed $value, string $confirmFieldName): void
     {
         $confirmField = $confirmFieldName ?: "{$field}_confirmation";
         $confirmValue = $this->data[$confirmField] ?? null;
@@ -149,7 +143,6 @@ class Validator
     {
         return $this->errors;
     }
-
 
     public function validated(): Redirect|array
     {

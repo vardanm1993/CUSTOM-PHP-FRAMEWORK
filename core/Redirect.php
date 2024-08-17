@@ -53,9 +53,18 @@ class Redirect
         return $this;
     }
 
-    public function withInput(?Validator $validator): Redirect
+    /**
+     * @throws ContainerException
+     * @throws ReflectionException
+     */
+    public function withInput(): Redirect
     {
-        Session::flash('old', $this->validator->getData() ?? []);
+        $data = $this->validator->getData() ?? App::resolve(Request::class)?->all() ?? null;
+
+        if ($data === null) {
+            Session::flash('old', $this->validator->getData() ?? []);
+        }
+
         return $this;
     }
 }
