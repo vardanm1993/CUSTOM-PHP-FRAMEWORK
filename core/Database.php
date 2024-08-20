@@ -6,7 +6,6 @@ use Core\Exceptions\NotFoundException;
 use Core\Exceptions\QueryException;
 use PDO;
 use PDOStatement;
-use stdClass;
 
 class Database
 {
@@ -23,10 +22,15 @@ class Database
         ]);
     }
 
+    public function getConnection(): PDO
+    {
+        return $this->connection;
+    }
+
     /**
      * @throws QueryException
      */
-    public function query(string $sql, array $data = []): Database
+    public function execute(string $sql, array $data = []): Database
     {
         $this->stmt = $this->connection->prepare($sql);
 
@@ -39,18 +43,34 @@ class Database
     /**
      * @throws NotFoundException
      */
-    public function get(): array
+    public function first(array $data = []): mixed
     {
-        return $this->stmt->fetchAll(PDO::FETCH_OBJ)
+        if (!$data) {
+            return $this->stmt->fetch()
+                ?: throw new NotFoundException('Record not found');
+        }
+
+        return $this->stmt->fetch(...$data)
             ?: throw new NotFoundException('Record not found');
     }
 
     /**
      * @throws NotFoundException
      */
-    public function find(): stdClass
+    public function get(array $data = []): array
     {
-        return $this->stmt->fetch(PDO::FETCH_OBJ)
+        if (!$data) {
+            return $this->stmt->fetchAll()
+                ?: throw new NotFoundException('Record not found');
+        }
+
+        return $this->stmt->fetchAll(...$data)
             ?: throw new NotFoundException('Record not found');
     }
+
+    public function lastInsertId(): int
+    {
+        return $this->connection->lastInsertId();
+    }
+
 }

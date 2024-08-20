@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Test;
 use Core\App;
 use Core\Database;
 use Core\Exceptions\ContainerException;
@@ -55,10 +56,15 @@ class TestController
             redirect('test/1');
         }
 
+        $data = [
+            'name' => 'Lorem Ipsum',
+            'description' => 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum',
+        ];
+
         $db = App::resolve(Database::class);
 
-        $db->query("
-            CREATE TABLE IF NOT EXISTS test (
+        $db->execute("
+            CREATE TABLE IF NOT EXISTS tests (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 description TEXT,
@@ -67,7 +73,7 @@ class TestController
             )
         ");
 
-        $db->query("INSERT INTO test (name, description) VALUES (:name, :description)", $data);
+        $test = Test::create($data);
 
         return redirect('/test/2');
     }
@@ -81,9 +87,7 @@ class TestController
      */
     public function show($id): string
     {
-        $test = App::resolve(Database::class)
-            ?->query("SELECT * FROM test WHERE id = :id", ['id' => $id])->find();
-
+        $test = Test::find($id);
         return view('show', compact('test'));
     }
 
