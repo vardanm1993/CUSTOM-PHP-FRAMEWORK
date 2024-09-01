@@ -21,6 +21,11 @@ class Validator
             Session::flash('old', $data);
         }
 
+        if (!$validator->fails()){
+            Session::unflash();
+        }
+
+
         return $validator;
     }
 

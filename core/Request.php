@@ -36,27 +36,37 @@ class Request
         return file_get_contents('php://input');
     }
 
-
     /**
-     * @throws JsonException
+     * @return array
      */
     public function getJson(): array
     {
-        return json_decode($this->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        $body = $this->getBody();
+
+        if (empty($body)) {
+            return [];
+        }
+
+        try {
+            return json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return [];
+        }
     }
 
     /**
-     * @throws JsonException
+     * @return array
      */
     public function all(): array
     {
         $json = $this->getJson() ?? [];
-
         return array_merge($this->get, $this->post, $this->files, $json);
     }
 
     /**
-     * @throws JsonException
+     * @param string $key
+     * @param $default
+     * @return mixed|null
      */
     public function input(string $key, $default = null)
     {
@@ -77,7 +87,8 @@ class Request
     }
 
     /**
-     * @throws JsonException
+     * @param string $key
+     * @return bool
      */
     public function has(string $key): bool
     {
@@ -87,7 +98,8 @@ class Request
     }
 
     /**
-     * @throws JsonException
+     * @param array $keys
+     * @return array
      */
     public function only(array $keys): array
     {
@@ -95,7 +107,8 @@ class Request
     }
 
     /**
-     * @throws JsonException
+     * @param array $keys
+     * @return array
      */
     public function except(array $keys): array
     {

@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Test;
-use Core\App;
-use Core\Database;
 use Core\Exceptions\ContainerException;
 use Core\Exceptions\NotFoundTemplate;
 use Core\Redirect;
 use Core\Request;
 use Core\Validator;
-use JsonException;
+use Migrations\CreateTestsTable;
 use ReflectionException;
 
 class TestController
@@ -40,10 +38,11 @@ class TestController
     /**
      * @throws ContainerException
      * @throws ReflectionException
-     * @throws JsonException
      */
     public function store(): Redirect
     {
+        (new CreateTestsTable())->up();
+
 
         $validator = Validator::make($this->request->all(), [
             'name' => 'required|string|min:3|max:20',
@@ -53,27 +52,11 @@ class TestController
         $data = $validator->validated();
 
         if ($validator->fails()) {
-            redirect('test/1');
+            redirect('/');
         }
 
-        $data = [
-            'name' => 'Lorem Ipsum',
-            'description' => 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum',
-        ];
 
-        $db = App::resolve(Database::class);
-
-        $db->execute("
-            CREATE TABLE IF NOT EXISTS tests (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                description TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-            )
-        ");
-
-        $test = Test::create($data);
+        Test::create($data);
 
         return redirect('/test/2');
     }

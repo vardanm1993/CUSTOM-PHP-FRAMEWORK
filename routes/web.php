@@ -7,4 +7,4 @@ Route::get('/', [TestController::class,'test']);
 Route::get('/test_redirect', [TestController::class,'testRedirect']);
 Route::get('/test/{id}', [TestController::class,'show']);
 Route::get('/auth', [TestController::class,'auth'])->middleware('auth')->name('test.auth');
-Route::get('/store', [TestController::class,'store']);
+Route::post('/store', [TestController::class,'store']);
