@@ -70,15 +70,12 @@ class Model
             $bindings[] = $this->attributes[$this->primaryKey];
 
             $sql = "UPDATE {$this->table} SET {$set} WHERE {$this->primaryKey} = ?";
-        } else {
-            $columns = implode(', ', array_keys($this->attributes));
-            $placeholders = implode(', ', array_fill(0, count($this->attributes), '?'));
-            $bindings = array_values($this->attributes);
+            $db->execute(sql: $sql, data: $bindings);
 
-            $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$placeholders})";
+        } else {
+          $db->insert($this->table, $this->attributes);
         }
 
-        $db->execute(sql: $sql, data: $bindings);
 
         if (!isset($this->attributes[$this->primaryKey])) {
             $this->attributes[$this->primaryKey] = $db->lastInsertId();

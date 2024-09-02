@@ -73,4 +73,18 @@ class Database
         return $this->connection->lastInsertId();
     }
 
+    /**
+     * @throws QueryException
+     */
+    public function insert(string $table, array $attributes): void
+    {
+        $columns = implode(', ', array_keys($attributes));
+        $placeholders = implode(', ', array_fill(0, count($attributes), '?'));
+        $bindings = array_values($attributes);
+
+        $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders})";
+
+        $this->execute($sql, $bindings);
+    }
+
 }
