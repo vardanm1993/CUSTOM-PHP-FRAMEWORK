@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+
+use Core\Console\ConsoleKernel;
+use Core\Exceptions\ContainerException;
+
+const BASE_PATH = __DIR__;
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+require base_path('bootstrap.php');
+
+
+$kernel = new ConsoleKernel();
+
+try {
+    $kernel->handle($argv);
+} catch (ContainerException|ReflectionException $e) {
+
+}

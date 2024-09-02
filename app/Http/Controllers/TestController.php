@@ -8,7 +8,6 @@ use Core\Exceptions\NotFoundTemplate;
 use Core\Redirect;
 use Core\Request;
 use Core\Validator;
-use Migrations\CreateTestsTable;
 use ReflectionException;
 
 class TestController
@@ -41,8 +40,6 @@ class TestController
      */
     public function store(): Redirect
     {
-        (new CreateTestsTable())->up();
-
 
         $validator = Validator::make($this->request->all(), [
             'name' => 'required|string|min:3|max:20',

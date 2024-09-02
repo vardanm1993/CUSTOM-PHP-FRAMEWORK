@@ -9,7 +9,6 @@ use ReflectionException;
 
 class CreateTestsTable extends Migration
 {
-
     /**
      * @throws ReflectionException
      * @throws ContainerException
@@ -31,6 +30,5 @@ class CreateTestsTable extends Migration
     public function down(): void
     {
         $this->schema->dropIfExists('tests');
-
     }
 }
