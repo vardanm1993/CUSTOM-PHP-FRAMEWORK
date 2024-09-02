@@ -39,6 +39,17 @@ class Database
         }
         return $this;
     }
+    public function query(string $sql, array $data = []): array|false
+    {
+        try {
+            $this->stmt = $this->connection->prepare($sql);
+            $this->stmt->execute($data);
+            return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            echo "Query failed: " . $e->getMessage();
+            return false;
+        }
+    }
 
     /**
      * @throws NotFoundException
