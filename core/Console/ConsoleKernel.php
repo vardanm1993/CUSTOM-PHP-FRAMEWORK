@@ -3,6 +3,7 @@
 namespace Core\Console;
 
 use Core\Console\Commands\MigrateCommand;
+use Core\Console\Commands\RollbackCommand;
 use Core\Exceptions\ContainerException;
 use ReflectionException;
 
@@ -10,6 +11,7 @@ class ConsoleKernel
 {
     protected array $commands = [
         MigrateCommand::class,
+        RollbackCommand::class,
     ];
 
     /**

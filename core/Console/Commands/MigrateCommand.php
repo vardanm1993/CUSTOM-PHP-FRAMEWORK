@@ -4,6 +4,7 @@ namespace Core\Console\Commands;
 
 use Core\App;
 use Core\Console\Command;
+use Core\Console\Traits\MigrationCommandTrait;
 use Core\Database;
 use Core\Exceptions\ContainerException;
 use Core\Exceptions\Exception;
@@ -12,6 +13,7 @@ use ReflectionException;
 
 class MigrateCommand extends Command
 {
+    use MigrationCommandTrait;
     protected string $signature = 'migrate';
     protected string $description = 'Run the database migrations';
 
@@ -29,12 +31,11 @@ class MigrateCommand extends Command
         $migrationFiles = glob("{$path}/*.php");
         $batchNumber = $this->getNextBatchNumber();
 
-
         $migratedMigrations = $this->getMigratedMigrations();
 
         foreach ($migrationFiles as $file) {
             $migrationFileName = $this->getMigrationFileName($file);
-            $migrationClassName = $this->getMigrationClassName($file);
+            $migrationClassName = $this->getMigrationClassName(migrationFileName: $migrationFileName);
 
             if (!in_array($migrationFileName, $migratedMigrations, true)) {
 
@@ -98,15 +99,6 @@ class MigrateCommand extends Command
     private function getMigrationFileName(string $file): string
     {
         return pathinfo($file, PATHINFO_FILENAME);
-    }
-
-    private function getMigrationClassName(string $file): string
-    {
-        $className = basename($file, '.php');
-
-        $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d+_/', '', $className);
-
-        return 'Migrations\\' . str_replace(' ', '', ucwords(str_replace('_', ' ', $withoutTimestamp)));
     }
 
     /**
