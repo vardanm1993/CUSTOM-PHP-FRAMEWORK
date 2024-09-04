@@ -39,6 +39,7 @@ class Database
         }
         return $this;
     }
+
     public function query(string $sql, array $data = []): array|false
     {
         try {
@@ -98,4 +99,66 @@ class Database
         $this->execute($sql, $bindings);
     }
 
+    public function select(
+        string       $table,
+        array|string $columns = '*',
+        array        $conditions = [],
+        string       $orderBy = '',
+        int          $limit = 0,
+        int          $offset = 0
+    ): array
+    {
+        $columns = is_array($columns) ? implode(', ', $columns) : $columns;
+
+        $sql = "SELECT {$columns} FROM {$table}";
+
+        $bindings = [];
+
+        if (!empty($conditions)) {
+            $conditionStrings = [];
+            foreach ($conditions as $column => $value) {
+                $conditionStrings[] = "{$column} = ?";
+                $bindings[] = $value;
+            }
+            $sql .= " WHERE " . implode(' AND ', $conditionStrings);
+        }
+
+        if ($orderBy) {
+            $sql .= " ORDER BY {$orderBy}";
+        }
+
+        if ($limit > 0) {
+            $sql .= " LIMIT {$limit}";
+        }
+
+        if ($offset > 0) {
+            $sql .= " OFFSET {$offset}";
+        }
+
+        return $this->query($sql, $bindings);
+    }
+
+    /**
+     * @throws QueryException
+     */
+    public function delete(string $table, array $conditions = []): void
+    {
+        if (empty($conditions)) {
+            throw new \InvalidArgumentException('Conditions are required for a DELETE operation.');
+        }
+
+        $sql = "DELETE FROM {$table}";
+
+        $bindings = [];
+        $conditionStrings = [];
+
+        foreach ($conditions as $column => $value) {
+            $conditionStrings[] = "{$column} = ?";
+            $bindings[] = $value;
+        }
+
+        $sql .= " WHERE " . implode(' AND ', $conditionStrings);
+
+        $this->execute($sql, $bindings);
+    }
 }
