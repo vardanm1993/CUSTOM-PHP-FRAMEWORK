@@ -2,6 +2,7 @@
 
 namespace Core\Console;
 
+use Core\Console\Commands\MakeMigrationCommand;
 use Core\Console\Commands\MigrateCommand;
 use Core\Console\Commands\RollbackCommand;
 use Core\Exceptions\ContainerException;
@@ -12,6 +13,7 @@ class ConsoleKernel
     protected array $commands = [
         MigrateCommand::class,
         RollbackCommand::class,
+        MakeMigrationCommand::class
     ];
 
     /**
@@ -25,7 +27,9 @@ class ConsoleKernel
         foreach ($this->commands as $commandClass) {
             $command = new $commandClass();
 
-            if ($command->getSignature() === $commandName) {
+            $commandSignature = explode(' ', $command->getSignature())[0];
+
+            if ($commandSignature === $commandName) {
                 $command->handle();
                 return;
             }
