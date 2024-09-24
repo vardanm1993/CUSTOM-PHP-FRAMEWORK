@@ -68,4 +68,16 @@ abstract class Command
 
         return null;
     }
+
+    protected function call(string $commandName): void
+    {
+        $commands = ConsoleKernel::getCommands();
+
+        if (!isset($commands[$commandName])) {
+            echo "Command '{$commandName}' not found.\n";
+            return;
+        }
+
+        (new $commands[$commandName])->handle();
+    }
 }
