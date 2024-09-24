@@ -98,18 +98,4 @@ class RollbackCommand extends Command
             return [];
         }
     }
-
-    /**
-     * @param string $migrationFileName
-     * @return void
-     * @throws ReflectionException
-     */
-    private function deleteMigrationRecord(string $migrationFileName): void
-    {
-        try {
-            App::resolve(Database::class)?->delete('migrations', ['migration' => $migrationFileName]);
-        } catch (Exception $e) {
-            echo "Failed to delete migration record for $migrationFileName: " . $e->getMessage() . "\n";
-        }
-    }
 }

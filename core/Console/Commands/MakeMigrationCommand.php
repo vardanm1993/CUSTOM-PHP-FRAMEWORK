@@ -19,7 +19,7 @@ class MakeMigrationCommand extends Command
      * @throws ReflectionException
      * @throws ContainerException
      */
-    public function handle()
+    public function handle(): void
     {
         $name = $this->argument('name');
 
