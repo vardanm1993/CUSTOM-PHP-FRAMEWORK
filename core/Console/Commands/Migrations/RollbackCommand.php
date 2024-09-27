@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Console\Commands;
+namespace Core\Console\Commands\Migrations;
 
 use Core\App;
 use Core\Console\Command;
@@ -37,7 +37,7 @@ class RollbackCommand extends Command
             $migrationFileName = $migration['migration'];
             $migrationClassName = $this->getMigrationClassName($migrationFileName);
 
-            require_once dirname(__DIR__) . '/../../database/migrations/' . $migrationFileName . '.php';
+            require_once dirname(__DIR__) . '/../../../database/migrations/' . $migrationFileName . '.php';
 
             $instance = new $migrationClassName();
 

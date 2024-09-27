@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Console\Commands;
+namespace Core\Console\Commands\Migrations;
 
 use Core\App;
 use Core\Console\Command;
@@ -27,7 +27,7 @@ class MigrateCommand extends Command
             $this->createMigrationsTable();
         }
 
-        $path = dirname(__DIR__) . '/../../database/migrations';
+        $path = dirname(__DIR__) . '/../../../database/migrations';
         $migrationFiles = glob("{$path}/*.php");
         $batchNumber = $this->getNextBatchNumber();
 

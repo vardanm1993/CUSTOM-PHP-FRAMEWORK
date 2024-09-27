@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Console\Commands;
+namespace Core\Console\Commands\Migrations;
 
 use Core\App;
 use Core\Console\Command;
@@ -15,6 +15,10 @@ class FreshCommand extends Command
     protected string $signature = 'migrate:fresh';
     protected string $description = 'Drop all tables and re-run all migrations';
 
+    /**
+     * @throws ContainerException
+     * @throws ReflectionException
+     */
     public function handle(): void
     {
         echo "Dropping all tables...\n";

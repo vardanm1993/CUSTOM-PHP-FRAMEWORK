@@ -2,12 +2,12 @@
 
 namespace Core\Console;
 
-use Core\Console\Commands\FreshCommand;
-use Core\Console\Commands\MakeMigrationCommand;
-use Core\Console\Commands\MigrateCommand;
-use Core\Console\Commands\RefreshCommand;
-use Core\Console\Commands\ResetCommand;
-use Core\Console\Commands\RollbackCommand;
+use Core\Console\Commands\Migrations\FreshCommand;
+use Core\Console\Commands\Migrations\MakeMigrationCommand;
+use Core\Console\Commands\Migrations\MigrateCommand;
+use Core\Console\Commands\Migrations\RefreshCommand;
+use Core\Console\Commands\Migrations\ResetCommand;
+use Core\Console\Commands\Migrations\RollbackCommand;
 use Core\Exceptions\ContainerException;
 use ReflectionException;
 

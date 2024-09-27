@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Console\Commands;
+namespace Core\Console\Commands\Migrations;
 
 use Core\Console\Command;
 
