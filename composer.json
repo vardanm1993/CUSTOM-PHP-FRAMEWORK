@@ -5,7 +5,9 @@
     "psr-4": {
       "App\\": "app/",
       "Core\\": "core/",
-      "Migrations\\": "database/migrations/"
+      "Migrations\\": "database/migrations/",
+      "Factories\\": "database/factories/",
+      "Seeders\\": "database/seeders/"
     },
     "files": [
       "core/helpers/helpers.php"

@@ -8,6 +8,7 @@ use Core\Console\Commands\Migrations\MigrateCommand;
 use Core\Console\Commands\Migrations\RefreshCommand;
 use Core\Console\Commands\Migrations\ResetCommand;
 use Core\Console\Commands\Migrations\RollbackCommand;
+use Core\Console\Commands\Seeders\SeedCommand;
 use Core\Exceptions\ContainerException;
 use ReflectionException;
 
@@ -20,6 +21,7 @@ class ConsoleKernel
         'migrate:reset' => ResetCommand::class,
         'migrate:refresh' => RefreshCommand::class,
         'migrate:fresh' => FreshCommand::class,
+        'db:seed' => SeedCommand::class,
     ];
 
     /**
