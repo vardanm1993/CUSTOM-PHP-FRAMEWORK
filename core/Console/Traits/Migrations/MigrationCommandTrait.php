@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Console\Traits;
+namespace Core\Console\Traits\Migrations;
 
 use Core\App;
 use Core\Database;
@@ -11,14 +11,14 @@ trait MigrationCommandTrait
 {
     /**
      * @param string $migrationFileName
-     * @param false $onlyClass
+     * @param bool $onlyClass
      * @return string
      */
     private function getMigrationClassName(string $migrationFileName, bool $onlyClass = false): string
     {
         $withoutTimestamp = preg_replace('/^\d{4}_\d{2}_\d{2}_\d+_/', '', $migrationFileName);
 
-        if ($onlyClass){
+        if ($onlyClass) {
             return str_replace(' ', '', ucwords(str_replace('_', ' ', $withoutTimestamp)));
         }
 
