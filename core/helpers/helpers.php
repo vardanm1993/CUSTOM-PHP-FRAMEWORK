@@ -208,3 +208,14 @@ if (!function_exists('old')) {
         return Session::old($key, $default);
     }
 }
+
+if (!function_exists('plural')) {
+    function plural($word): string
+    {
+        if (str_ends_with($word, 'y') && !in_array(substr($word, -2, 1), ['a', 'e', 'i', 'o', 'u'])) {
+            return substr($word, 0, -1) . 'ies';
+        }
+
+        return $word . 's';
+    }
+}
