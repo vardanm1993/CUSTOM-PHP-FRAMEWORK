@@ -3,25 +3,21 @@
 namespace Core\Console\Commands\Seeders;
 
 use Core\Console\Command;
+use Core\Console\Traits\CustomMake;
 use Core\Console\Traits\HasFactoryOrSeeder;
 use Core\Exceptions\ContainerException;
 use ReflectionException;
-use Seeders\DatabaseSeeder;
 
 class MakeSeederCommand extends Command
 {
-    use HasFactoryOrSeeder;
+    use CustomMake;
 
     protected string $signature = 'make:seeder {name}';
     protected string $description = 'Create a new seeder file';
 
-    /**
-     * @throws ContainerException
-     * @throws ReflectionException
-     */
     public function handle(): void
     {
-        $this->make('seeder');
+        $this->make('seeder', dirname(__DIR__, 4) . '/database/seeders/');
     }
 
     private function getContent(string $className): string

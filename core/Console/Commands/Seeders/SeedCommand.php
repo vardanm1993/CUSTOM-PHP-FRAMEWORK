@@ -14,8 +14,7 @@ class SeedCommand extends Command
     public function handle(): void
     {
         try {
-            $seeder = new DatabaseSeeder();
-            $seeder->run();
+            (new DatabaseSeeder)->run();
 
             echo "Database seeded successfully.\n";
         } catch (\Throwable $e) {
