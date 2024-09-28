@@ -7,11 +7,11 @@ use JsonException;
 class Request
 {
     public function __construct(
-        public readonly array $server,
-        public readonly array $get,
-        public readonly array $post,
-        public readonly array $files,
-        public readonly array $cookies,
+        public array $server,
+        public array $get,
+        public array $post,
+        public array $files,
+        public array $cookies,
     )
     {
     }
@@ -68,7 +68,7 @@ class Request
      * @param $default
      * @return mixed|null
      */
-    public function input(string $key, $default = null)
+    public function input(string $key, $default = null): mixed
     {
         if (array_key_exists($key, $this->post)) {
             return $this->post[$key];
