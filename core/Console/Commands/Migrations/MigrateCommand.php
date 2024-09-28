@@ -4,17 +4,20 @@ namespace Core\Console\Commands\Migrations;
 
 use Core\App;
 use Core\Console\Command;
-use Core\Console\Traits\MigrationCommandTrait;
+use Core\Console\Traits\Migrations\MigrationCommandTrait;
+use Core\Console\Traits\Migrations\MigrationHasSpecialPropsTrait;
 use Core\Database;
 use Core\Exceptions\ContainerException;
 use Core\Exceptions\Exception;
 use Core\Migration\Migration;
 use ReflectionException;
+use Seeders\DatabaseSeeder;
 
 class MigrateCommand extends Command
 {
-    use MigrationCommandTrait;
-    protected string $signature = 'migrate';
+    use MigrationCommandTrait, MigrationHasSpecialPropsTrait;
+
+    protected string $signature = 'migrate {--seed}';
     protected string $description = 'Run the database migrations';
 
     /**
@@ -23,11 +26,16 @@ class MigrateCommand extends Command
      */
     public function handle(): void
     {
-        if (!$this->migrationsTableExists()) {
-            $this->createMigrationsTable();
+        if (!class_exists(DatabaseSeeder::class)) {
+            $this->call('make:seeder', arguments: ['DatabaseSeeder']);
         }
 
-        $path = dirname(__DIR__) . '/../../../database/migrations';
+        if (!$this->migrationsTableExists()) {
+            $this->createMigrationsTable();
+
+        }
+
+        $path = dirname(__DIR__,4) . '/database/migrations';
         $migrationFiles = glob("{$path}/*.php");
         $batchNumber = $this->getNextBatchNumber();
 
@@ -50,13 +58,16 @@ class MigrateCommand extends Command
 
                         echo "Migrated: $migrationFileName\n";
 
-                    }  catch (\Exception $e) {
+                    } catch (\Exception $e) {
                         echo "Failed to migrate $migrationFileName: " . $e->getMessage() . "\n";
                     }
                 }
             }
 
         }
+
+        $this->hasSeed();
+
     }
 
     /**

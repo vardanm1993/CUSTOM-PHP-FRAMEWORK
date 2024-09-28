@@ -4,7 +4,7 @@ namespace Core\Console\Commands\Migrations;
 
 use Core\App;
 use Core\Console\Command;
-use Core\Console\Traits\MigrationCommandTrait;
+use Core\Console\Traits\Migrations\MigrationCommandTrait;
 use Core\Database;
 use Core\Exceptions\ContainerException;
 use Core\Exceptions\Exception;
@@ -14,6 +14,7 @@ use ReflectionException;
 class ResetCommand extends Command
 {
     use MigrationCommandTrait;
+
     protected string $signature = 'migrate:reset';
 
     protected string $description = 'Rollback all database migrations';
@@ -35,7 +36,7 @@ class ResetCommand extends Command
             $migrationFileName = $migration['migration'];
             $migrationClassName = $this->getMigrationClassName($migrationFileName);
 
-            require_once dirname(__DIR__) . '/../../../database/migrations/' . $migrationFileName . '.php';
+            require_once dirname(__DIR__,4) . '/database/migrations/' . $migrationFileName . '.php';
 
             $instance = new $migrationClassName();
 

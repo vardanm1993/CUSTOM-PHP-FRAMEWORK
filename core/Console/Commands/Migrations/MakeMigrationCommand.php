@@ -3,7 +3,7 @@
 namespace Core\Console\Commands\Migrations;
 
 use Core\Console\Command;
-use Core\Console\Traits\MigrationCommandTrait;
+use Core\Console\Traits\Migrations\MigrationCommandTrait;
 use Core\Exceptions\ContainerException;
 use ReflectionException;
 
@@ -32,7 +32,7 @@ class MakeMigrationCommand extends Command
 
         $timestamp = date('Y_m_d_His');
         $filename = $timestamp . '_' . $name . '.php';
-        $path = dirname(__DIR__) . '/../../../database/migrations/' . $filename;
+        $path = dirname(__DIR__,4) . '/database/migrations/' . $filename;
 
         if ($this->migrationFileExists($name)) {
             echo "Migration file already exists: $filename\n";
@@ -95,7 +95,7 @@ EOT;
 
     private function migrationFileExists(string $name): bool
     {
-        $files = glob(dirname(__DIR__) . '/../../../database/migrations/*_' . $name . '.php');
+        $files = glob(dirname(__DIR__,4) . '/database/migrations/*_' . $name . '.php');
         return !empty($files);
     }
 }

@@ -4,15 +4,16 @@ namespace Core\Console\Commands\Migrations;
 
 use Core\App;
 use Core\Console\Command;
+use Core\Console\Traits\Migrations\MigrationHasSpecialPropsTrait;
 use Core\Database;
 use Core\Exceptions\ContainerException;
 use ReflectionException;
 
 class FreshCommand extends Command
 {
+    use MigrationHasSpecialPropsTrait;
 
-
-    protected string $signature = 'migrate:fresh';
+    protected string $signature = 'migrate:fresh {seed}';
     protected string $description = 'Drop all tables and re-run all migrations';
 
     /**
@@ -26,6 +27,8 @@ class FreshCommand extends Command
 
         echo "Running all migrations...\n";
         $this->call('migrate');
+
+        $this->hasSeed();
     }
 
     /**

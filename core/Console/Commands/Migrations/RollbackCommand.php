@@ -4,7 +4,7 @@ namespace Core\Console\Commands\Migrations;
 
 use Core\App;
 use Core\Console\Command;
-use Core\Console\Traits\MigrationCommandTrait;
+use Core\Console\Traits\Migrations\MigrationCommandTrait;
 use Core\Database;
 use Core\Exceptions\ContainerException;
 use Core\Exceptions\Exception;
@@ -22,7 +22,7 @@ class RollbackCommand extends Command
      * @throws ContainerException
      * @throws ReflectionException
      */
-    public function handle()
+    public function handle(): void
     {
         $lastBatch = $this->getLastBatchNumber();
 
@@ -37,7 +37,7 @@ class RollbackCommand extends Command
             $migrationFileName = $migration['migration'];
             $migrationClassName = $this->getMigrationClassName($migrationFileName);
 
-            require_once dirname(__DIR__) . '/../../../database/migrations/' . $migrationFileName . '.php';
+            require_once dirname(__DIR__,4) . '/database/migrations/' . $migrationFileName . '.php';
 
             $instance = new $migrationClassName();
 
