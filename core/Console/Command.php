@@ -69,7 +69,11 @@ abstract class Command
         return null;
     }
 
-    protected function call(string $commandName): void
+    /**
+     * @throws ContainerException
+     * @throws ReflectionException
+     */
+    protected function call(string $commandName, array $arguments = [], array $options = []): void
     {
         $commands = ConsoleKernel::getCommands();
 
@@ -78,6 +82,26 @@ abstract class Command
             return;
         }
 
+        App::resolve(Request::class)->server['argv'] = array_merge(
+            ['artisan', $commandName],
+            $this->formatArguments($arguments),
+            $this->formatOptions($options)
+        );
+
         (new $commands[$commandName])->handle();
+    }
+
+    protected function formatArguments(array $arguments): array
+    {
+        return array_map(static function ($key, $value) {
+            return $value;
+        }, array_keys($arguments), $arguments);
+    }
+
+    protected function formatOptions(array $options): array
+    {
+        return array_map(static function ($key, $value) {
+            return "--{$key}=" . $value;
+        }, array_keys($options), $options);
     }
 }

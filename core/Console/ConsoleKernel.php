@@ -2,12 +2,14 @@
 
 namespace Core\Console;
 
+use Core\Console\Commands\Factory\MakeFactoryCommand;
 use Core\Console\Commands\Migrations\FreshCommand;
 use Core\Console\Commands\Migrations\MakeMigrationCommand;
 use Core\Console\Commands\Migrations\MigrateCommand;
 use Core\Console\Commands\Migrations\RefreshCommand;
 use Core\Console\Commands\Migrations\ResetCommand;
 use Core\Console\Commands\Migrations\RollbackCommand;
+use Core\Console\Commands\Seeders\MakeSeederCommand;
 use Core\Console\Commands\Seeders\SeedCommand;
 use Core\Exceptions\ContainerException;
 use ReflectionException;
@@ -22,6 +24,8 @@ class ConsoleKernel
         'migrate:refresh' => RefreshCommand::class,
         'migrate:fresh' => FreshCommand::class,
         'db:seed' => SeedCommand::class,
+        'make:factory' => MakeFactoryCommand::class,
+        'make:seeder' => MakeSeederCommand::class
     ];
 
     /**
@@ -45,6 +49,6 @@ class ConsoleKernel
 
     public static function getCommands(): array
     {
-        return  self::$commands;
+        return self::$commands;
     }
 }
