@@ -25,16 +25,7 @@ class TestController
     }
 
     /**
-     * @throws ReflectionException
-     * @throws ContainerException
-     */
-    public function testRedirect(): Redirect
-    {
-        return redirect_back()->with('id', 1);
-    }
-
-
-    /**
+     * @return Redirect
      * @throws ContainerException
      * @throws ReflectionException
      */
@@ -53,9 +44,9 @@ class TestController
         }
 
 
-        Test::create($data);
+        $test = Test::create($data);
 
-        return redirect('/test/2');
+        return redirect("/test/{$test->id}");
     }
 
     /**
